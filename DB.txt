@@ -1,0 +1,20 @@
+cards :
+	Card_Name
+	Card_Value
+game :
+	Card_Name
+	Card_Value
+	Player_Name
+sabot :
+	Card_Name
+	Card_Value
+	ID
+
+
+
+-------------------------------
+
+
+Tirage de carte au ralenti ?
+Corriger double AS = défaite :(
+Faire double game en même temps si 2 cartes identiques

@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css?family=Arvo:400,700|Lato:400,700,900');
+
+* {box-sizing: border-box;font-family: 'Lato', sans-serif;margin: 0;}
+body {margin: 0;/*background-image: url('background.jpg');*/overflow: hidden;}
+section {width: 100vw;height: 100vh;background-color: rgba(0,0,0,0.5);display: flex;flex-flow: column nowrap;justify-content: center;align-items: center;}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;margin: 0;
+}
+
+/***** Navigation HEADER *****/
+header {display: flex;flex-flow: row wrap;justify-content: space-between;align-items: center;width: 100vw;height: 10vh;position: fixed;top: 0;left: 0;}
+header > div {display: flex;flex-flow: row wrap;justify-content: flex-end;align-items: center;height: 10vh;}
+header #home {display: flex;justify-content: center;align-items: center;background-color: rgb(81,154,154);height: 100%;padding: 0 30px;text-decoration: none;transition: .3s linear;}
+header #home svg {width: 40px;fill: white;transition: .3s linear;}
+header #highscore {color: white;display: flex;justify-content: center;align-items: center;background-color: rgb(154,63,81);height: 100%;padding: 0 30px;text-decoration: none;transition: .3s linear;}
+header #profil {color: white;display: flex;justify-content: center;align-items: center;background-color: #01416F;height: 100%;padding: 0 30px;text-decoration: none;text-transform: uppercase;transition: .3s linear;}
+header #logoff {color: white;display: flex;justify-content: center;align-items: center;background-color: rgb(100,50,200);height: 100%;padding: 0 30px;text-decoration: none;text-transform: uppercase;transition: .3s linear;}
+header #cash {color: white;display: flex;justify-content: center;align-items: center;background-color: rgb(12,150,98);height: 100%;padding: 0 30px;text-decoration: none;}
+header #cash svg {width: 15px;fill:white;}
+header #home:hover, header #highscore:hover, header #profil:hover, header #logoff:hover {background-color: white;}
+header #home:hover svg {fill: rgb(81,154,154);}
+header #highscore:hover {color: rgb(154,63,81);}
+header #profil:hover {color: #01416F; }
+header #logoff:hover {color: rgb(100,50,200);}
+
+#formulaires {display: flex;flex-flow: row wrap;justify-content: center;align-items:center;height: 50vh;}
+#formulaires form {display: flex;flex-flow: column wrap;justify-content: space-between;align-items: center;height: 250px;}
+#formulaires form h2 {margin: 0;}
+#formulaires form input {border: none;outline:0;padding: 10px; display: flex;width: 300px;height: 50px;font-size: 14px;background: black;color: gold;justify-content: center;align-items: center;margin: 0 2vw;}
+#formulaires form input[type=submit] {width: 300px;height: 50px;}
+#formulaires form input[type=submit]:hover {background-color: rgb(154,63,81);}
+
+#WarningAccount {margin: 60px auto;padding: 20px 20px;background-color: black;width: 50%;color: yellow;border: 1px solid red;box-shadow: 0px 0px 30px 10px red;position: absolute;bottom: 100px;}
+#WarningAccount span {font-weight: bold;text-shadow: 1px 1px 0 red;text-decoration: underline;}
+
+h1 {text-align: center;text-transform: uppercase;font-size: 20px;font-family: 'Arvo', serif;color:#01416F;text-shadow: 2px 2px 2px black;font-size: 36px;/*margin-bottom: 50px;*/}
+h2 {text-align: center;text-transform: uppercase;color: rgb(154,63,81);text-shadow: 2px 2px 2px black;font-size: 24px;font-family: 'Arvo', serif;margin-top: 5vh;}
+
+p {text-align: center;text-transform: uppercase;display: flex;flex-flow: row wrap;justify-content: center;align-items: center;}
+p span {font-weight: bold;color: gold;margin: 0 5px;}
+
+form#accueil {width: 30vw;}
+form {display: flex;flex-flow: row wrap;justify-content: center;align-items: center;}
+form p {font-size: 10px;font-style: italic;}
+input[type=submit] {border: none; padding: 10px 20px;display: flex;height: 50px;font-size: 20px;text-transform: uppercase;background: black;color: gold;justify-content: center;align-items: center;cursor: pointer;transition: all 0.3s linear;margin: 0 1vw;}
+input[type=submit]:hover {background-color: #01416F;}
+input[type=submit]:first-child:hover {background-color: rgb(154,40,40);}
+
+div#input_mise {display: flex;flex-flow: column wrap;align-items: flex-start;}
+label {display: inline-block;font-size: 20px;color: white;margin-bottom: 10px;}
+#formulaires input[type=number] {border: none;display: flex;width: 120px;height: 50px;font-size: 20px;text-align: center; text-transform: uppercase;color: gold;justify-content: center;align-items: center;margin: 0;}
+
+input:disabled {cursor: initial;background-color: #cccccc;color: #666;}
+input:disabled:hover {background-color: #ccc;}
+input:disabled:first-child:hover {background-color: #ccc;}
+
+/**** Player's Card Display ****/
+div.players_container {display: flex;flex-flow: row wrap;justify-content: space-around;align-items: center;width: 100vw;margin:0;}
+div.players_container h2 {margin-bottom: 2vh;}
+div.players_container p {color: white;}
+
+.players_container div.player {margin-bottom: 5vh;}
+
+div.cards_container {display: flex;flex-flow: row wrap;justify-content: center;align-items: center;width: 50vw;position: relative;}
+div.cards_container #Left_Cards, div.cards_container #Right_Cards {width: 10vw;display: flex;flex-flow: column wrap;justify-content: center;align-items: center;margin:0 1vw;}
+div.cards_container img {width: 10vw;margin: 0 -3vw;}
+div.cards_container div img:nth-child(1n):not(:first-child) {margin: -25vh 0 0 0;}
+
+#score {margin: 2vh 0;}
+
+
+
+div#popup_end {position: absolute;top: 20vh;left: calc(50% - 25vw);width: 50vw;background: rgb(12,150,98);display: flex;flex-flow: column wrap;justify-content: center;align-items: center;border: 1px solid black;z-index: 10;padding: 20px;box-shadow: 2px 5px 20px black;}
+#endgame p {font-weight: bold;margin:10px 0;}
+form#again {justify-content: center;margin: 0;}
+
+#looser {display: flex;flex-flow: column wrap; justify-content: center;align-items: center;/*height: 50vh;*/}
+#looser form {margin-top: 10vh;}
+#looser form input[type=submit]:first-child:hover {background-color: #01416F;}
+#looser #refill input:nth-child(2) {transform: scale(1.5);}
+
+#highscores {display: flex;justify-content: center;align-items: center;overflow: hidden;position: relative;width: 20vw;margin: 0 auto;height: 440px;}
+#highscores .players {display: flex;flex-flow: column wrap;justify-content: center;width: 20vw;background: #191D31;/*padding: 20px;*/border-radius: 10px;}
+#highscores .players #column_Title {display: flex;justify-content: space-between;background-color: #5A40A2;padding: 10px 20px;}
+#highscores .players #column_Title h2 {margin:0;display: flex;justify-content: center;align-items: center;text-shadow: none;color: white;}
+#highscores .players svg {width: 20px;margin-left: 5px;fill: white;}
+#highscores .players .player {display: flex;justify-content: space-between;padding:  10px 20px;}
+#highscores .players .player p {color: white;margin: 0;}
+#highscores .players .player p:last-child {font-weight: bold;text-shadow: 3px 3px 0 black;}
+
+#highscores .players {animation: 1s linear forwards deploy;position: absolute;}
+@keyframes deploy {
+	from {top: -400px;}
+	to {top: 0;}
+}
+
+footer {background: black;height: 30px;position: absolute;bottom: 0;left: 0;width: 100vw;display: flex;flex-flow: row wrap;justify-content: center;align-items: center;}
+footer p {color: #fff;}
+
+
+/******* Page Profil *******/
+#page_profil {display: flex;}
+#page_profil a {border: none; padding: 10px 20px;display: flex;height: 50px;width:250px;font-size: 20px;text-transform: uppercase;text-decoration: none;background: black;color: gold;justify-content: center;align-items: center;transition: 0.3s linear;}
+#page_profil a:hover {background-color: #01416F;}
+#page_profil form {display: flex;flex-flow: column wrap;justify-content: space-between;align-items: center;margin-top: 50px;}
+#page_profil form div {margin: 10px 0;}
+#page_profil form input {border: none;outline:0;padding: 10px;background-color: black;color: gold;width: 300px;height: 50px;font-size: 14px;}
+#page_profil form input[type=submit]:hover {background-color: #01416F;}
+
+#page_profil g rect:first-child {fill:rgb(12,150,98) !important; stroke-width: 0 !important;}
+#page_profil g rect {fill:#01416F !important; stroke-width: 0 !important;}
+
+
+
+/* Code Credit Card */
+.card {
+  background-color: #171a1c;
+  border-radius: 1rem;
+  color: #47474e;
+  padding: 2rem;
+}
+.card__header {
+  display: flex;justify-content: space-between;
+}
+.card h3 {color: #01416F;}
+
+input {
+  background-color: transparent;
+  border: 0;
+  color: #fff;
+  font: inherit;
+  width: auto;
+}
+input::placeholder {
+  color: #fff;
+}
+
+label {
+  display: block;
+  color: #01416F;
+}
+.form__field {
+  margin-bottom: 1.5rem;
+}
+.form input {
+  outline: 0;
+}
+.form input[type="email"], .form input[type="password"] {
+  width: 100%;
+}
+
+.grid {
+  margin: 10vh auto 0;
+  max-width: 36rem;
+  width: 90%;
+}
+
+svg {
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+a {
+  color: #171a1c;
+}
+
+.ui-selectmenu-menu {
+  display: none;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  z-index: 999;
+}
+.ui-selectmenu-menu li {
+  background-color: #171a1c;
+  color: #fff;
+  padding: .25rem 1rem;
+  cursor: pointer;
+}
+.ui-selectmenu-menu li.ui-state-focus {
+  background-color: #47474e;
+}
+.ui-selectmenu-menu .ui-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow: auto;
+}
+.ui-selectmenu-open {
+  display: block;
+}
+.ui-selectmenu-button {
+  color: #fff;
+  cursor: pointer;
+  outline: 0;
+  position: relative;
+  margin-right: 30px;
+}
+.ui-selectmenu-button.ui-corner-top .ui-icon-triangle-1-s {
+  transform: rotate(-180deg);
+}
+.ui-selectmenu-button .ui-icon-triangle-1-s {
+  background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-254 408.9 42 24" fill="#47474e"><path d="M-212 411.9c0-1.7-1.3-3-3-3-.8 0-1.5.3-2.1.8l-15.9 15.9-15.7-15.7c-.5-.6-1.4-1-2.3-1-1.7 0-3 1.3-3 3 0 .8.3 1.5.8 2.1l18 18c.5.6 1.3.9 2.2.9.8 0 1.6-.4 2.2-.9l18-18c.5-.6.8-1.3.8-2.1z"/></svg>') 50%/14px no-repeat;
+  height: 14px;
+  margin-top: 5px;
+  transform-origin: 50%;
+  transition: transform .3s;
+  width: 14px;
+  position: absolute;
+  right: -20px;
+}
+#looser form.form {flex-flow: column wrap;align-items: flex-start;margin-top: 2vh;}
+/*#looser form div {width: 100%}*/
+#expiration_ccv {display: flex;justify-content: space-between;width: 100%;}
