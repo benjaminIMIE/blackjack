@@ -33,7 +33,7 @@
 							<form action="lancement_partie.php" method="POST" id="accueil">
 								<div id="input_mise">
 									<label for="mise">Votre mise :</label>
-									<input type="number" name="bet" id="mise" min="1" max=<?php echo ($DisplayAccount[0] / 2); ?> step="1" value="10" />
+									<input type="number" name="bet" id="mise" min="1" max=<?php echo ($DisplayAccount[0]); ?> step="1" value="10" />
 								</div>
 								<input type="submit" name="valider" value="Jouer"/>
 							</form>

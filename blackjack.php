@@ -16,6 +16,8 @@
 	// Score system
 	$Player_Score = 0;
 	$Dealer_Score = 0;
+	$Player_Score_Left = 0;
+	$Player_Score_Right = 0;
 
 	$Player_Score_Query = $bdd->prepare("SELECT SUM(Card_Value) FROM game WHERE Player_Name = ?");
 	$Player_Score_Query->bindParam('1', $Player_Name);
@@ -250,7 +252,7 @@
 
 						}// Player won both games
 						elseif ( ($Player_Score_Left > $Dealer_Score AND $Player_Score_Left <= 21) && 
-							     ($Player_Score_Right > $Dealer_Score AND $Player_Score_Right <= 21) ){
+							     ($Player_Score_Right > $Dealer_Score AND $Player_Score_Right <= 21) OR $Dealer_Score > 21 ){
 							if ($_SESSION['double_1'] == false && $_SESSION['double_2'] == false) {
 								$DisplayAccounts->execute(); 
 								echo "<p>Double Victoire !</p>";
@@ -468,16 +470,15 @@
 			// Add card in the Game Table
 			$Player_Name = 'Player';
 			$game->execute();
-			echo $Player_Score;
 
-			if ($Player_Score <= 21 && $Card_Value == 1 && (($Player_Score + 10) <= 21) ) {
+			if ($Player_Score <= 21 && $Card_Value == 1 && (($Player_Score + 11) <= 21) ) {
 				$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 1 AND Player_Name = ? AND Card_ID = ?");
 				$CheckAs->bindParam('1', $Card_Value);
 				$CheckAs->bindParam('2', $Player_Name);
 				$CheckAs->bindParam('3', $Card_ID);
 				$Card_Value = 11;
 				$CheckAs->execute();
-			} elseif ($Player_Score > 21) {
+			} elseif ( ($Player_Score + $Card_Value) > 21) {
 				$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 11 AND Player_Name = ?");
 				$CheckAs->bindParam('1', $Card_Value);
 				$CheckAs->bindParam('2', $Player_Name);
@@ -489,7 +490,7 @@
 
 			// Remove card after draw
 			$deleteCard->execute();
-			// header("Refresh:0");
+			header("Refresh:0");
 		} elseif (isset($_POST['double'])) { // Player press "Double" button
 			$_SESSION['FirstChoice'] = false;
 			$query->execute();
@@ -512,11 +513,10 @@
 				$CheckAs->bindParam('3', $Card_ID);
 				$Card_Value = 11;
 				$CheckAs->execute();
-			} else {
-				$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 11 AND Player_Name = ? AND Card_ID = ?");
+			} elseif ( ($Player_Score + $Card_Value) > 21) {
+				$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 11 AND Player_Name = ?");
 				$CheckAs->bindParam('1', $Card_Value);
 				$CheckAs->bindParam('2', $Player_Name);
-				$CheckAs->bindParam('3', $Card_ID);
 				$Card_Value = 1;
 				$CheckAs->execute();
 			}
@@ -548,7 +548,6 @@
 				// Add card in the Game Table
 				$Player_Name = 'Dealer';
 				$game->execute();
-
 				// Check As
 				if ($Dealer_Score <= 21 && $Card_Value == 1 && ($Dealer_Score + 11) <= 21) {
 				$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 1 AND Player_Name = ? AND Card_ID = ?");
@@ -557,11 +556,10 @@
 				$CheckAs->bindParam('3', $Card_ID);
 				$Card_Value = 11;
 				$CheckAs->execute();
-				} else {
-					$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 11 AND Player_Name = ? AND Card_ID = ?");
+				} elseif ( ($Dealer_Score + $Card_Value) > 21) {
+					$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 11 AND Player_Name = ?");
 					$CheckAs->bindParam('1', $Card_Value);
 					$CheckAs->bindParam('2', $Player_Name);
-					$CheckAs->bindParam('3', $Card_ID);
 					$Card_Value = 1;
 					$CheckAs->execute();
 				}
@@ -607,11 +605,10 @@
 				$CheckAs->bindParam('3', $Card_ID);
 				$Card_Value = 11;
 				$CheckAs->execute();
-				} else {
-					$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 11 AND Player_Name = ?AND Card_ID = ?");
+				} elseif ( ($Dealer_Score + $Card_Value) > 21) {
+					$CheckAs = $bdd->prepare("UPDATE game SET Card_Value = ? WHERE Card_Value = 11 AND Player_Name = ?");
 					$CheckAs->bindParam('1', $Card_Value);
 					$CheckAs->bindParam('2', $Player_Name);
-					$CheckAs->bindParam('3', $Card_ID);
 					$Card_Value = 1;
 					$CheckAs->execute();
 				}
@@ -675,6 +672,16 @@
 			$split->bindParam('3', $Card_ID);
 			$split->bindParam('4', $Position);
 			
+			// Check Left Score before adding a new card
+			$Player_Score_Query = $bdd->prepare("SELECT SUM(Card_Value) FROM split WHERE Position = ?");
+			$Player_Score_Query->bindParam('1', $Position);
+			$Position = 'left';
+			$Player_Score_Query->execute();
+
+			while ($Player_Points = $Player_Score_Query->fetch()) {
+				$Player_Score_Left = $Player_Points[0];
+			} 
+
 			// First Card
 			$Card_Name = $sabot[0]['Card_Name'];
 			$Card_Value = $sabot[0]['Card_Value'];
@@ -683,16 +690,22 @@
 			$split->execute();
 
 			//check AS
-			if ($Player_Score <= 21 && $Card_Value == 1 && ($Player_Score + 11) <= 21) {
+			if ($Card_Value == 1 && (($Player_Score_Left + 11) <= 21)) {
 				$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 1 AND Card_ID = ?");
 				$CheckAs->bindParam('1', $Card_Value);
 				$CheckAs->bindParam('2', $Card_ID);
 				$Card_Value = 11;
 				$CheckAs->execute();
+			} elseif ( ($Player_Score_Left + $Card_Value) > 21) {
+				$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11");
+				$CheckAs->bindParam('1', $Card_Value);
+				$Card_Value = 1;
+				$CheckAs->execute();
 			} else {
-				$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Card_ID = ?");
+				$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Card_ID = ? AND Position = ?");
 				$CheckAs->bindParam('1', $Card_Value);
 				$CheckAs->bindParam('2', $Card_ID);
+				$CheckAs->bindParam('3', $Position);
 				$Card_Value = 1;
 				$CheckAs->execute();
 			}
@@ -700,6 +713,16 @@
 			// Remove card after draw
 			$deleteCard->execute();
 			
+			// Check Left Score before adding a new card
+			$Player_Score_Query = $bdd->prepare("SELECT SUM(Card_Value) FROM split WHERE Position = ?");
+			$Player_Score_Query->bindParam('1', $Position);
+			$Position = 'right';
+			$Player_Score_Query->execute();
+
+			while ($Player_Points = $Player_Score_Query->fetch()) {
+				$Player_Score_Right = $Player_Points[0];
+			} 
+
 			// Second Card
 			$Card_Name = $sabot[1]['Card_Name'];
 			$Card_Value = $sabot[1]['Card_Value'];
@@ -708,16 +731,22 @@
 			$split->execute();
 
 			//check AS
-			if ($Player_Score <= 21 && $Card_Value == 1 && ($Player_Score + 11) <= 21) {
+			if ($Player_Score_Right <= 21 && $Card_Value == 1 && ($Player_Score_Right + 11) <= 21) {
 				$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 1 AND Card_ID = ?");
 				$CheckAs->bindParam('1', $Card_Value);
 				$CheckAs->bindParam('2', $Card_ID);
 				$Card_Value = 11;
 				$CheckAs->execute();
+			} elseif ( ($Player_Score_Right + $Card_Value) > 21) {
+				$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11");
+				$CheckAs->bindParam('1', $Card_Value);
+				$Card_Value = 1;
+				$CheckAs->execute();
 			} else {
-				$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Card_ID = ?");
+				$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Card_ID = ? AND Position = ?");
 				$CheckAs->bindParam('1', $Card_Value);
 				$CheckAs->bindParam('2', $Card_ID);
+				$CheckAs->bindParam('3', $Position);
 				$Card_Value = 1;
 				$CheckAs->execute();
 			}
@@ -757,20 +786,16 @@
 					$CheckAs->bindParam('3', $Position);
 					$Card_Value = 11;
 					$CheckAs->execute();
-				} else {
-					$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Card_ID = ? AND Position = ?");
+				} elseif ( ($Player_Score_Left + $Card_Value) > 21) {
+					$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Position = ?");
 					$CheckAs->bindParam('1', $Card_Value);
-					$CheckAs->bindParam('2', $Card_ID);
-					$CheckAs->bindParam('3', $Position);
+					$CheckAs->bindParam('2', $Position);
 					$Card_Value = 1;
 					$CheckAs->execute();
 				}
 
 				// Remove card after draw
 				$deleteCard->execute();
-				if ($Player_Score > 21) {
-
-				}
 			}
 			header("Refresh:0");
 		} elseif (isset($_POST['double_1'])) { // Player press "Double" button
@@ -801,11 +826,10 @@
 					$CheckAs->bindParam('3', $Position);
 					$Card_Value = 11;
 					$CheckAs->execute();
-				} else {
-					$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Card_ID = ? AND Position = ?");
+				} elseif ( ($Player_Score_Left + $Card_Value) > 21) {
+					$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Position = ?");
 					$CheckAs->bindParam('1', $Card_Value);
-					$CheckAs->bindParam('2', $Card_ID);
-					$CheckAs->bindParam('3', $Position);
+					$CheckAs->bindParam('2', $Position);
 					$Card_Value = 1;
 					$CheckAs->execute();
 				}
@@ -858,11 +882,10 @@
 					$CheckAs->bindParam('3', $Position);
 					$Card_Value = 11;
 					$CheckAs->execute();
-				} else {
-					$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Card_ID = ? AND Position = ?");
+				} elseif ( ($Player_Score_Right + $Card_Value) > 21) {
+					$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Position = ?");
 					$CheckAs->bindParam('1', $Card_Value);
-					$CheckAs->bindParam('2', $Card_ID);
-					$CheckAs->bindParam('3', $Position);
+					$CheckAs->bindParam('2', $Position);
 					$Card_Value = 1;
 					$CheckAs->execute();
 				}
@@ -899,11 +922,10 @@
 					$CheckAs->bindParam('3', $Position);
 					$Card_Value = 11;
 					$CheckAs->execute();
-				} else {
-					$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Card_ID = ? AND Position = ?");
+				} elseif ( ($Player_Score_Right + $Card_Value) > 21) {
+					$CheckAs = $bdd->prepare("UPDATE split SET Card_Value = ? WHERE Card_Value = 11 AND Position = ?");
 					$CheckAs->bindParam('1', $Card_Value);
-					$CheckAs->bindParam('2', $Card_ID);
-					$CheckAs->bindParam('3', $Position);
+					$CheckAs->bindParam('2', $Position);
 					$Card_Value = 1;
 					$CheckAs->execute();
 				}
@@ -976,7 +998,15 @@
 		} elseif (isset($_POST['stand_2'])) { // Player press "Stand" button
 			$_SESSION['second_game'] = false;
 		} 
-
+		
+		// Player press "Hit" button but exceed 21.
+		if ($Player_Score_Left > 21) {
+			$_SESSION['first_game'] = false;
+		}
+		if ($Player_Score_Right > 21){
+			$_SESSION['second_game'] = false;
+		}
+ 		// Player pressed "Stand" button for the 2 games
 		if ($_SESSION['first_game'] == false && $_SESSION['second_game'] == false) {
 			while ($Dealer_Score <= 16) {
 				$query->execute();
