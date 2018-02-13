@@ -1,5 +1,5 @@
 		<?php require('head.php'); ?>
-		<?php 
+		<?php
 
 			$_SESSION['gameStatus'] = true;
 			$_SESSION['double'] = false;
@@ -19,7 +19,6 @@
 			
 
 			?>
-			<h2>Cliquez sur Jouer pour lancer une partie !</h2>
 				<?php 
 					$DisplayAccounts->execute(); 
 					while ($DisplayAccount = $DisplayAccounts->fetch()) {
@@ -29,13 +28,15 @@
 
 						?>
 
-						<div id="formulaires">
+						<div id="form_mise">
+							<img src="img/jetons.png" alt="Boite de jetons"/>
 							<form action="lancement_partie.php" method="POST" id="accueil">
-								<div id="input_mise">
-									<label for="mise">Votre mise :</label>
-									<input type="number" name="bet" id="mise" min="1" max=<?php echo ($DisplayAccount[0]); ?> step="1" value="10" />
-								</div>
-								<input type="submit" name="valider" value="Jouer"/>
+								<input type="image" src="img/jetons_1.png" name="bet" value="1">
+								<input type="image" src="img/jetons_5.png" name="bet" value="5">
+								<input type="image" src="img/jetons_10.png" name="bet" value="10">
+								<input type="image" src="img/jetons_25.png" name="bet" value="25">
+								<input type="image" src="img/jetons_50.png" name="bet" value="50">
+								<input type="image" src="img/jetons_100.png" name="bet" value="100">
 							</form>
 						</div>
 					<?php }	

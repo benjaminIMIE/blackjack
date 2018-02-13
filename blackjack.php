@@ -429,15 +429,6 @@
 		$_SESSION['newAmount'] = $newAmount;
 		?>
 
-
-
-	<h1>Votre mise initiale est de : 
-		<?php
-			echo $_SESSION['bet'] . ' BitCoins';
-		?>
-	</h1>
-
-
 	<?php 	 
 
 		// Select cards from 'Sabot'
@@ -1063,31 +1054,32 @@
 		?>
 		<div class="players_container">
 			<div class="player">
-				<?php echo "<h2>Cartes du joueur</h2>";	?>
 				<div class="cards_container">
 					<?php // Display Player's Cards
 					if (isset($_POST['split']) || $_SESSION['split'] == true) {
-						// Faire la query pour selectionner que le bon côté.
+						// Faire la query pour ne selectionner que le bon côté.
 						$Left_Cards = $bdd->prepare("SELECT * FROM split WHERE Position = 'left' ");
 						$Left_Cards->execute();
 						echo "<div id='Left_Cards'>";
 						while ($Left_Card = $Left_Cards->fetch()) {
-							echo "<img src=img/" . $Left_Card['Card_Name'] . ".svg alt=" . $Left_Card['Card_Name'] . "/>";
+							echo "<img src=img/Cards/" . $Left_Card['Card_Name'] . ".svg alt=" . $Left_Card['Card_Name'] . "/>";
 						}
+						echo '<img src="img/jetons_' . $_SESSION['bet'] . '.png" alt="Mise de ' . $_SESSION['bet'] . ' Bitcoins" class="jeton" />';
 						echo "</div>";
 
 						$Right_Cards = $bdd->prepare("SELECT * FROM split WHERE Position = 'right' ");
 						$Right_Cards->execute();
 						echo "<div id='Right_Cards'>";
 						while ($Right_Card = $Right_Cards->fetch()) {
-							echo "<img src=img/" . $Right_Card['Card_Name'] . ".svg alt=" . $Right_Card['Card_Name'] . "/>";
+							echo "<img src=img/Cards/" . $Right_Card['Card_Name'] . ".svg alt=" . $Right_Card['Card_Name'] . "/>";
 						}
+						echo '<img src="img/jetons_' . $_SESSION['bet'] . '.png" alt="Mise de ' . $_SESSION['bet'] . ' Bitcoins" class="jeton" />';
 						echo "</div>";
 					} else {
 						$Player_Cards->execute();
 						$i=0;
 						while ($Player_Card = $Player_Cards->fetch()) {
-							echo "<img src=img/" . $Player_Card['Card_Name'] . ".svg alt=" . $Player_Card['Card_Name'] . "/>";
+							echo "<img src=img/Cards/" . $Player_Card['Card_Name'] . ".svg alt=" . $Player_Card['Card_Name'] . "/>";
 							if ($i == 0) {
 							 	$_SESSION['first_Card'] = $Player_Card['Card_Number'];
 							} else {
@@ -1095,6 +1087,7 @@
 							}
 							$i++;
 						} 
+						echo '<img src="img/jetons_' . $_SESSION['bet'] . '.png" alt="Mise de ' . $_SESSION['bet'] . ' Bitcoins" class="jeton" />';
 					} ?>
 				</div>
 			</div>
@@ -1102,19 +1095,21 @@
 				<?php // Display Dealer Cards
 				$Dealer_Cards = $bdd->prepare("SELECT * FROM game WHERE Player_Name = 'Dealer'");
 				$Dealer_Cards->execute();
-				echo "<h2>Cartes du dealer</h2>" ;
+				// echo "<h2>Cartes du dealer</h2>" ;
 				?>
 				<div class="cards_container">
 					<?php
 					while ($Dealer_Card = $Dealer_Cards->fetch()) {
-						echo "<img src=img/" . $Dealer_Card['Card_Name'] . ".svg alt=" . $Dealer_Card['Card_Name'] . "/>";
+						echo "<img src=img/Cards/" . $Dealer_Card['Card_Name'] . ".svg alt=" . $Dealer_Card['Card_Name'] . "/>";
 					} ?>
 				</div>
 			</div>
-			<div id="score">
+		</div>
+		<div id="score">
+			<div>
 				<?php
 				// Score display
-				echo "<h2>Score</h2>";
+				echo "<h1>Score</h1>";
 				// Display Player's Score
 				if ($_SESSION['split'] == true) {
 					$Player_Score_Query = $bdd->prepare("SELECT SUM(Card_Value) FROM split WHERE Position = 'left'");
@@ -1123,7 +1118,7 @@
 					while ($Player_Points = $Player_Score_Query->fetch()) {
 						$Player_Score = $Player_Points[0];
 					} 
-					echo "<p>Score actuel partie de gauche : " . $Player_Score;
+					echo "<p>Score actuel partie de gauche : <span>". $Player_Score . "</span></p>";
 
 					$Player_Score_Query = $bdd->prepare("SELECT SUM(Card_Value) FROM split WHERE Position = 'right'");
 					$Player_Score_Query->execute();
@@ -1131,117 +1126,118 @@
 					while ($Player_Points = $Player_Score_Query->fetch()) {
 						$Player_Score = $Player_Points[0];
 					} 
-					echo "<p>Score actuel partie de droite : " . $Player_Score;
+					echo "<p>Score actuel partie de droite : <span>". $Player_Score . "</span></p>";
 				} else {
-					echo "<p>Score actuel pour le joueur : " . $Player_Score . '</p>';
+					echo "<p>Score actuel pour le joueur : <span>". $Player_Score . "</span></p>";
 				}
 				// Display Dealer's Score
-				echo "<p>Score actuel pour le dealer : " . $Dealer_Score . '</p>';
+				echo "<p>Score actuel pour le dealer : <span>". $Dealer_Score . "</span></p>";
 
 				?>
 			</div>
 		</div>
-
-		<?php // Forms
-		if (isset($_SESSION['gameStatus']) && $_SESSION['gameStatus'] == false && $_SESSION['split'] == false) {
-			?>
-			 <form action="" method="POST">
-			 	<input type="submit" name="stand" value="Rester" disabled="disabled" />
-			 	<input type="submit" name="hit" value="Tirer une carte" disabled="disabled"/>
-			 	<input type="submit" name="double" value="Doubler" disabled="disabled" />
-			 </form>
-			<?php 
-		} elseif ($_SESSION['split'] == true) {
-			if ($_SESSION['first_game'] == false && $_SESSION['second_game'] == false) { ?>
-				<form action="" method="POST">
-				 	<div id="first_game">
-			 			<p>1ère partie</p>
-					 	<input type="submit" name="stand_1" value="Rester" disabled="disabled"/>
-					 	<input type="submit" name="hit_1" value="Tirer une carte" disabled="disabled"/>
-				 	</div>
-				 	<div id="second_game">
-				 		<p>2ème partie</p>
-						<input type="submit" name="stand_2" value="Rester" disabled="disabled" />
-					 	<input type="submit" name="hit_2" value="Tirer une carte" disabled="disabled"/>
-				 	</div>
-				</form>
-			<?php } elseif ($_SESSION['first_game'] == false) { ?>
-				<form action="" method="POST">
-				 	<div id="first_game">
-			 			<p>1ère partie</p>
-						<input type="submit" name="stand_1" value="Rester" disabled="disabled" />
-					 	<input type="submit" name="hit_1" value="Tirer une carte" disabled="disabled"/>
-				 	</div>
-				 	<div id="second_game">
-				 		<p>2ème partie</p>
-					 	<input type="submit" name="stand_2" value="Rester"/>
-					 	<input type="submit" name="hit_2" value="Tirer une carte"/>
-					 	<?php
-							if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['FirstChoice_2'] == true) {
-								echo '<input type="submit" name="double_2" value="Doubler" />';
-							}
-					 	?>
-				 	</div>
-				</form>
-			<?php } elseif ($_SESSION['second_game'] == false) { ?>
-				<form action="" method="POST">
-				 	<div id="first_game">
-			 			<p>1ère partie</p>
-					 	<input type="submit" name="stand_1" value="Rester"/>
-					 	<input type="submit" name="hit_1" value="Tirer une carte"/>
-					 	<?php
-							if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['FirstChoice_1'] == true) {
-								echo '<input type="submit" name="double_1" value="Doubler" />';
-							}
-					 	?>
-				 	</div>
-				 	<div id="second_game">
-				 		<p>2ème partie</p>
-						<input type="submit" name="stand_2" value="Rester" disabled="disabled" />
-					 	<input type="submit" name="hit_2" value="Tirer une carte" disabled="disabled"/>
-				 	</div>
-				</form>
-			<?php }  else { ?>
-				<form action="" method="POST">
-				 	<div id="first_game">
-				 		<p>1ère partie</p>
-					 	<input type="submit" name="stand_1" value="Rester"/>
-					 	<input type="submit" name="hit_1" value="Tirer une carte"/>
-					 	<?php
-							if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['FirstChoice_1'] == true) {
-								echo '<input type="submit" name="double_1" value="Doubler" />';
-							}
-					 	?>
-				 	</div>
-				 	<div id="second_game">
-				 		<p>2ème partie</p>
-					 	<input type="submit" name="stand_2" value="Rester"/>
-					 	<input type="submit" name="hit_2" value="Tirer une carte"/>
-					 	<?php
-							if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['FirstChoice_2'] == true) {
-								echo '<input type="submit" name="double_2" value="Doubler" />';
-							}
-					 	?>
-				 	</div>
-				</form>
-			<?php }
-		} else {
-			?>
-			 <form action="" method="POST">
-			 	<input type="submit" name="stand" value="Rester"/>
-			 	<input type="submit" name="hit" value="Tirer une carte"/>
-			 	<?php
-					if ($_SESSION['FirstChoice'] == true) {
-						echo '<input type="submit" name="double" value="Doubler" />';
-					}
-			 	?>
-			 	<?php
-					if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['split'] == false && $_SESSION['FirstChoice'] == true) {
-						echo '<input type="submit" name="split" value="Split"/>';
-					}
-			 	?>
-			 </form>
-		<?php }	?>
+		<div id="game_controlers">
+			<?php // Forms
+			if (isset($_SESSION['gameStatus']) && $_SESSION['gameStatus'] == false && $_SESSION['split'] == false) {
+				?>
+				 <form action="" method="POST">
+				 	<input type="submit" name="stand" value="Rester" disabled="disabled" />
+				 	<input type="submit" name="hit" value="Tirer une carte" disabled="disabled"/>
+				 	<input type="submit" name="double" value="Doubler" disabled="disabled" />
+				 </form>
+				<?php 
+			} elseif ($_SESSION['split'] == true) {
+				if ($_SESSION['first_game'] == false && $_SESSION['second_game'] == false) { ?>
+					<form action="" method="POST">
+					 	<div id="first_game">
+				 			<p>1ère partie</p>
+						 	<input type="submit" name="stand_1" value="Rester" disabled="disabled"/>
+						 	<input type="submit" name="hit_1" value="Tirer une carte" disabled="disabled"/>
+					 	</div>
+					 	<div id="second_game">
+					 		<p>2ème partie</p>
+							<input type="submit" name="stand_2" value="Rester" disabled="disabled" />
+						 	<input type="submit" name="hit_2" value="Tirer une carte" disabled="disabled"/>
+					 	</div>
+					</form>
+				<?php } elseif ($_SESSION['first_game'] == false) { ?>
+					<form action="" method="POST">
+					 	<div id="first_game">
+				 			<p>1ère partie</p>
+							<input type="submit" name="stand_1" value="Rester" disabled="disabled" />
+						 	<input type="submit" name="hit_1" value="Tirer une carte" disabled="disabled"/>
+					 	</div>
+					 	<div id="second_game">
+					 		<p>2ème partie</p>
+						 	<input type="submit" name="stand_2" value="Rester"/>
+						 	<input type="submit" name="hit_2" value="Tirer une carte"/>
+						 	<?php
+								if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['FirstChoice_2'] == true) {
+									echo '<input type="submit" name="double_2" value="Doubler" />';
+								}
+						 	?>
+					 	</div>
+					</form>
+				<?php } elseif ($_SESSION['second_game'] == false) { ?>
+					<form action="" method="POST">
+					 	<div id="first_game">
+				 			<p>1ère partie</p>
+						 	<input type="submit" name="stand_1" value="Rester"/>
+						 	<input type="submit" name="hit_1" value="Tirer une carte"/>
+						 	<?php
+								if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['FirstChoice_1'] == true) {
+									echo '<input type="submit" name="double_1" value="Doubler" />';
+								}
+						 	?>
+					 	</div>
+					 	<div id="second_game">
+					 		<p>2ème partie</p>
+							<input type="submit" name="stand_2" value="Rester" disabled="disabled" />
+						 	<input type="submit" name="hit_2" value="Tirer une carte" disabled="disabled"/>
+					 	</div>
+					</form>
+				<?php }  else { ?>
+					<form action="" method="POST">
+					 	<div id="first_game">
+					 		<p>1ère partie</p>
+						 	<input type="submit" name="stand_1" value="Rester"/>
+						 	<input type="submit" name="hit_1" value="Tirer une carte"/>
+						 	<?php
+								if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['FirstChoice_1'] == true) {
+									echo '<input type="submit" name="double_1" value="Doubler" />';
+								}
+						 	?>
+					 	</div>
+					 	<div id="second_game">
+					 		<p>2ème partie</p>
+						 	<input type="submit" name="stand_2" value="Rester"/>
+						 	<input type="submit" name="hit_2" value="Tirer une carte"/>
+						 	<?php
+								if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['FirstChoice_2'] == true) {
+									echo '<input type="submit" name="double_2" value="Doubler" />';
+								}
+						 	?>
+					 	</div>
+					</form>
+				<?php }
+			} else {
+				?>
+				 <form action="" method="POST">
+				 	<input type="submit" name="stand" value="Rester"/>
+				 	<input type="submit" name="hit" value="Tirer une carte"/>
+				 	<?php
+						if ($_SESSION['FirstChoice'] == true) {
+							echo '<input type="submit" name="double" value="Doubler" />';
+						}
+				 	?>
+				 	<?php
+						if ($_SESSION['first_Card'] == $_SESSION['second_Card'] && $_SESSION['split'] == false && $_SESSION['FirstChoice'] == true) {
+							echo '<input type="submit" name="split" value="Split"/>';
+						}
+				 	?>
+				 </form>
+			<?php }	?>
+		</div>
 
 		
 

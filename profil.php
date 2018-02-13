@@ -19,7 +19,6 @@
 			$update_Profil->bindParam('2',$_POST['mdp']);
 			$update_Profil->execute();
 		}
-		echo $_SESSION['starting_Account'];
 	 ?>
 
    <!-- Histogram -->

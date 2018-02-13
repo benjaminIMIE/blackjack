@@ -8,11 +8,11 @@
 	while ($highscore = $AllAcounts->fetch()) {
 		$TotalAmount +=$highscore[1];
 	}
-	echo $TotalAmount; 
 
 ?>
 
-	<h1>Tableau des gens bons</h1>
+	<!-- <h1>Tableau des gens bons</h1> -->
+	<img src="img/blackjack_1.png"/>
 	<div id='highscores'>
 		<div class='players'>
 			<div id="column_Title">

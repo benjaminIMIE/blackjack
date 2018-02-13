@@ -1,5 +1,12 @@
 <?php require('connexion.php'); ?>
 <?php session_start(); ?>
+<?php
+	$url = $_SERVER['PHP_SELF']; 
+    $reg = '#^(.+[\\\/])*([^\\\/]+)$#';
+    define('classPage', preg_replace($reg, '$2', $url));
+    $pos_point = strpos(classPage, '.');
+	$nomClass = substr(classPage, 0, $pos_point);
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -7,7 +14,7 @@
 		<title>BlackJack Full PHP</title>
 		<link rel="stylesheet" type="text/css" href="main.css">
 	</head>
-	<body>
+	<body class="<?php echo $nomClass;  ?>">
 		<section>
 			<header>
 				<div>

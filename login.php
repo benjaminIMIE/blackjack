@@ -1,18 +1,22 @@
 <?php require('head.php'); ?>
-	
-	<h1>Merci de vous connecter pour accéder au jeu.</h1>
 	<div id="formulaires">
 		<form action="" method="POST" id="inscription">
-			<h2>Inscription</h2>
-			<input type="text" name="pseudo" placeholder="Votre Pseudo"/>
-			<input type="password" name="mdp" placeholder="Votre mot de passe"/>
-			<input type="submit" name="create" value="S'enregistrer"/>
+			<div>
+				<img src="img/jetons01.png"/>
+				<h2>Inscription</h2>
+				<input type="text" name="pseudo" placeholder="Votre Pseudo"/>
+				<input type="password" name="mdp" placeholder="Votre mot de passe"/>
+				<input type="submit" name="create" value="S'enregistrer"/>
+			</div>
 		</form>
 		<form action="" method="POST" id="connexion">
-			<h2>Connexion</h2>
-			<input type="text" name="pseudo" placeholder="Votre Pseudo"/>
-			<input type="password" name="mdp" placeholder="Votre mot de passe"/>
-			<input type="submit" name="connect" value="Se connecter"/>
+			<div>
+				<img src="img/blackjack.png"/>
+				<h2>Connexion</h2>
+				<input type="text" name="pseudo" placeholder="Votre Pseudo"/>
+				<input type="password" name="mdp" placeholder="Votre mot de passe"/>
+				<input type="submit" name="connect" value="Se connecter"/>
+			</div>
 		</form>
 	</div>
 	<?php 
