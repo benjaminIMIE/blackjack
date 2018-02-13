@@ -18,7 +18,7 @@
 		<section>
 			<header>
 				<div>
-					<a href="accueil.php" id="home">
+					<a href="<?php if(isset($_SESSION['pseudo'])){ echo 'accueil';} else { echo 'login';} ?>.php" id="home">
 						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 27.02 27.02" style="enable-background:new 0 0 27.02 27.02;" xml:space="preserve">
 							<path d="M3.674,24.876c0,0-0.024,0.604,0.566,0.604c0.734,0,6.811-0.008,6.811-0.008l0.01-5.581
 								c0,0-0.096-0.92,0.797-0.92h2.826c1.056,0,0.991,0.92,0.991,0.92l-0.012,5.563c0,0,5.762,0,6.667,0

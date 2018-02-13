@@ -398,7 +398,7 @@
 				</div>
 				<?php // Check if player have enough money to play again
 					if ($newAmount <= 0) {
-						header( "Refresh:5; url=looser.php", true, 60*3);
+						header( "Refresh:2; url=looser.php", true, 60*3);
 					} else { ?>
 						<form action="Accueil.php" method="POST" id="again">
 						 	<input type="submit" name="again" value="Rejouer"/>
