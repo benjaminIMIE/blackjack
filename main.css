@@ -1,13 +1,30 @@
 @import url('https://fonts.googleapis.com/css?family=Arvo:400,700|Lato:400,700,900');
 
 * {box-sizing: border-box;font-family: 'Lato', sans-serif;margin: 0;}
+
 body {margin: 0;overflow: hidden;background-image: url('img/background1.jpg');}
 body.Accueil, body.accueil {background-image: url('img/backgroundAccueil.jpg');background-position: center;}
 body.blackjack {background-image: url('img/backgroundGame.jpg');background-position: center;}
 body.login {background-image: url('img/background.jpg');background-position: center;}
+
+/***** COMMUN *****/
 section {width: 100vw;height: 100vh;background-color: rgba(0,0,0,0.5);display: flex;flex-flow: column nowrap;justify-content: center;align-items: center;}
 
+h1 {text-align: center;text-transform: uppercase;font-size: 20px;font-family: 'Arvo', serif;color:#01416F;text-shadow: 2px 2px 2px black;font-size: 36px;/*margin-bottom: 50px;*/}
+h2 {text-align: center;text-transform: uppercase;color: rgb(154,63,81);text-shadow: 2px 2px 2px black;font-size: 24px;font-family: 'Arvo', serif;}
+p {text-align: center;text-transform: uppercase;display: flex;flex-flow: row wrap;justify-content: center;align-items: center;}
+p span {font-weight: bold;color: gold;margin: 0 5px;}
+
+form {display: flex;flex-flow: row wrap;justify-content: center;align-items: center;z-index: 5;}
+form p {font-size: 10px;font-style: italic;}
+label {display: inline-block;font-size: 20px;color: white;margin-bottom: 10px;}
+input[type=submit] {border: none; padding: 10px 20px;display: flex;height: 50px;font-size: 20px;text-transform: uppercase;background: black;color: gold;justify-content: center;align-items: center;cursor: pointer;transition: all 0.3s linear;margin: 0 1vw;}
+input[type=submit]:hover {background-color: #01416F;}
+input[type=submit]:first-child:hover {background-color: rgb(154,40,40);}
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {-webkit-appearance: none;margin: 0;}
+input:disabled {cursor: not-allowed;background-color: #cccccc;color: #666;}
+input:disabled:hover {background-color: #ccc;}
+input:disabled:first-child:hover {background-color: #ccc;}
 
 /***** Navigation HEADER *****/
 header {display: flex;flex-flow: row wrap;justify-content: space-between;align-items: center;width: 100vw;height: 10vh;position: fixed;top: 0;left: 0;}
@@ -56,27 +73,6 @@ header #logoff:hover {color: rgb(100,50,200);}
 #form_mise form input:nth-child(4) {right: 268px;bottom: 6px;}
 #form_mise form input:nth-child(5) {right: 154px;bottom: 6px;}
 #form_mise form input:nth-child(6) {right: 39px;bottom: 6px;}
-
-
-h1 {text-align: center;text-transform: uppercase;font-size: 20px;font-family: 'Arvo', serif;color:#01416F;text-shadow: 2px 2px 2px black;font-size: 36px;/*margin-bottom: 50px;*/}
-h2 {text-align: center;text-transform: uppercase;color: rgb(154,63,81);text-shadow: 2px 2px 2px black;font-size: 24px;font-family: 'Arvo', serif;}
-
-p {text-align: center;text-transform: uppercase;display: flex;flex-flow: row wrap;justify-content: center;align-items: center;}
-p span {font-weight: bold;color: gold;margin: 0 5px;}
-
-form {display: flex;flex-flow: row wrap;justify-content: center;align-items: center;z-index: 5;}
-form p {font-size: 10px;font-style: italic;}
-input[type=submit] {border: none; padding: 10px 20px;display: flex;height: 50px;font-size: 20px;text-transform: uppercase;background: black;color: gold;justify-content: center;align-items: center;cursor: pointer;transition: all 0.3s linear;margin: 0 1vw;}
-input[type=submit]:hover {background-color: #01416F;}
-input[type=submit]:first-child:hover {background-color: rgb(154,40,40);}
-
-div#input_mise {display: flex;flex-flow: column wrap;align-items: flex-start;}
-label {display: inline-block;font-size: 20px;color: white;margin-bottom: 10px;}
-#formulaires input[type=number] {border: none;display: flex;width: 120px;height: 50px;font-size: 20px;text-align: center; text-transform: uppercase;color: gold;justify-content: center;align-items: center;margin: 0;}
-
-input:disabled {cursor: not-allowed;background-color: #cccccc;color: #666;}
-input:disabled:hover {background-color: #ccc;}
-input:disabled:first-child:hover {background-color: #ccc;}
 
 /************************/
 /*****  PAGE GAME   *****/
